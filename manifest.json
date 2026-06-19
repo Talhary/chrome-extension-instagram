@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Instagram Video Downloader",
+  "version": "1.0",
+  "description": "Download Instagram videos and Reels with a single click directly from the UI.",
+  "permissions": [
+    "downloads",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*.instagram.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.instagram.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end",
+      "world": "ISOLATED"
+    },
+    {
+      "matches": ["https://*.instagram.com/*"],
+      "js": ["inject.js"],
+      "run_at": "document_end",
+      "world": "MAIN"
+    }
+  ]
+}

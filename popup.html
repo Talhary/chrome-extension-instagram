@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Video Downloader Settings</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 28, 45, 0.6);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-primary: #8b5cf6;
+            --accent-secondary: #3b82f6;
+            --success-color: #10b981;
+        }
+
+        body {
+            width: 320px;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        .container {
+            padding: 20px;
+            background: linear-gradient(135deg, #0b0f19 0%, #111827 100%);
+            border: 1px solid var(--border-color);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            border-radius: 8px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+        }
+
+        .logo-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: white;
+            stroke-width: 2.5;
+        }
+
+        .title {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(to right, #a78bfa, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin: 2px 0 0 0;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 16px;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .setting-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .setting-label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .setting-desc {
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            max-width: 190px;
+        }
+
+        /* Custom Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #374151;
+            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Input field styles */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-top: 12px;
+        }
+
+        .input-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .text-input {
+            background-color: rgba(17, 24, 39, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            padding: 8px 12px;
+            font-size: 12px;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        .text-input:focus {
+            border-color: var(--accent-secondary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+        }
+
+        .range-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .range-slider {
+            flex-grow: 1;
+            height: 4px;
+            background: #374151;
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent-secondary);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .range-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .range-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-secondary);
+            min-width: 24px;
+            text-align: right;
+        }
+
+        .footer {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 16px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+        }
+
+        .footer-logo {
+            font-weight: 600;
+            color: #8b5cf6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+            </div>
+            <div>
+                <h1 class="title">Downloader Settings</h1>
+                <p class="subtitle">Customize your Instagram downloader</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">Auto-Download Reels</div>
+                    <div class="setting-desc">Automatically download Instagram Reels as you watch them.</div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="autoDownloadEnabled">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="input-group" style="margin-top: 0;">
+                <label class="input-label" for="downloadFolder">Save Subfolder (Inside Downloads)</label>
+                <input type="text" id="downloadFolder" class="text-input" placeholder="e.g. InstagramReels" value="InstagramReels">
+            </div>
+
+            <div class="input-group" style="margin-top: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <label class="input-label" style="margin-bottom: 0;" for="watchTimeDelay">Watch Time before Download</label>
+                    <span id="watchTimeValue" class="range-value">3s</span>
+                </div>
+                <div class="range-group">
+                    <input type="range" id="watchTimeDelay" class="range-slider" min="1" max="10" value="3">
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Instagram Video Downloader v1.0 • Created by <span class="footer-logo">Antigravity</span>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
