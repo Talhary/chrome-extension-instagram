@@ -345,6 +345,79 @@
         column.insertBefore(downloadBtnWrapper, column.firstChild);
     }
 
+    // Inject rotate button into the actions column
+    function injectRotateButton(column, video) {
+        const rotateBtnWrapper = document.createElement('div');
+        rotateBtnWrapper.className = 'instagram-rotate-btn-inserted';
+        
+        // Inherit dynamic styling/layout classes of surrounding items
+        const firstChild = column.firstElementChild;
+        if (firstChild) {
+            if (!firstChild.classList.contains('instagram-rotate-btn-inserted') && !firstChild.classList.contains('instagram-download-btn-inserted')) {
+                rotateBtnWrapper.className += ' ' + firstChild.className;
+            }
+        }
+        
+        const btn = document.createElement('div');
+        btn.role = 'button';
+        btn.style.cursor = 'pointer';
+        btn.style.display = 'flex';
+        btn.style.flexDirection = 'column';
+        btn.style.alignItems = 'center';
+        btn.style.justifyContent = 'center';
+        
+        btn.innerHTML = `
+            <div class="rotate-icon-container">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rotate-svg-icon">
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                </svg>
+            </div>
+            <span style="font-size: 12px; margin-top: 4px; font-weight: 400; color: inherit;">Rotate</span>
+        `;
+        
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            let currentRotation = parseInt(video.dataset.rotation || '0', 10);
+            let nextRotation = (currentRotation + 90) % 360;
+            video.dataset.rotation = nextRotation;
+            
+            // Adjust scale if rotated 90 or 270 degrees to prevent clipping inside the slide layout
+            if (nextRotation === 90 || nextRotation === 270) {
+                const width = video.offsetWidth;
+                const height = video.offsetHeight;
+                if (width > 0 && height > 0) {
+                    const scale = Math.min(width, height) / Math.max(width, height);
+                    video.style.transform = `rotate(${nextRotation}deg) scale(${scale.toFixed(2)})`;
+                } else {
+                    video.style.transform = `rotate(${nextRotation}deg)`;
+                }
+            } else {
+                video.style.transform = nextRotation === 0 ? '' : `rotate(${nextRotation}deg)`;
+            }
+            
+            // Animate the rotation icon on click
+            const svgIcon = btn.querySelector('.rotate-svg-icon');
+            svgIcon.style.transition = 'transform 0.4s ease';
+            svgIcon.style.transform = 'rotate(-90deg)';
+            setTimeout(() => {
+                svgIcon.style.transition = 'none';
+                svgIcon.style.transform = '';
+            }, 400);
+        });
+        
+        rotateBtnWrapper.appendChild(btn);
+        
+        // Insert right below the download button if it exists
+        const downloadBtn = column.querySelector('.instagram-download-btn-inserted');
+        if (downloadBtn) {
+            column.insertBefore(rotateBtnWrapper, downloadBtn.nextSibling);
+        } else {
+            column.insertBefore(rotateBtnWrapper, column.firstChild);
+        }
+    }
+
     // Helper to find the actions column for a Like element
     function findActionsColumn(likeEl) {
         let current = likeEl;
@@ -412,13 +485,16 @@
             const column = findActionsColumn(actionEl);
             if (!column) return;
             
-            // Check if download button has already been inserted in this specific actions column
-            if (column.querySelector('.instagram-download-btn-inserted')) return;
-            
             const video = findVideoForColumn(column);
             if (video) {
-                console.log("Instagram Downloader: Injecting button into Reel actions column:", column);
-                injectDownloadButton(column, video);
+                if (!column.querySelector('.instagram-download-btn-inserted')) {
+                    console.log("Instagram Downloader: Injecting download button into Reel actions column:", column);
+                    injectDownloadButton(column, video);
+                }
+                if (!column.querySelector('.instagram-rotate-btn-inserted')) {
+                    console.log("Instagram Downloader: Injecting rotate button into Reel actions column:", column);
+                    injectRotateButton(column, video);
+                }
             }
         });
     }

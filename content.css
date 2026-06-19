@@ -1,5 +1,5 @@
 /* Instagram Downloader Button Styling */
-.instagram-download-btn-inserted {
+.instagram-download-btn-inserted, .instagram-rotate-btn-inserted {
     margin-bottom: 8px; /* Match standard Reels action column item spacing */
     display: flex;
     flex-direction: column;
@@ -7,7 +7,7 @@
     justify-content: center;
 }
 
-.download-icon-container {
+.download-icon-container, .rotate-icon-container {
     color: currentColor; /* Inherit context theme text color automatically (white or dark) */
     display: flex;
     align-items: center;
@@ -18,16 +18,16 @@
     transition: background-color 0.2s, transform 0.1s, color 0.2s;
 }
 
-.download-icon-container:hover {
+.download-icon-container:hover, .rotate-icon-container:hover {
     background-color: rgba(255, 255, 255, 0.12);
     transform: scale(1.05);
 }
 
-.download-icon-container:active {
+.download-icon-container:active, .rotate-icon-container:active {
     transform: scale(0.95);
 }
 
-.download-svg-icon {
+.download-svg-icon, .rotate-svg-icon {
     width: 24px;
     height: 24px;
     stroke: currentColor;
