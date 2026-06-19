@@ -383,15 +383,18 @@
             let nextRotation = (currentRotation + 90) % 360;
             video.dataset.rotation = nextRotation;
             
-            // Adjust scale if rotated 90 or 270 degrees to prevent clipping inside the slide layout
+            // Adjust scale if rotated 90 or 270 degrees to make it full screen width/height
             if (nextRotation === 90 || nextRotation === 270) {
                 const width = video.offsetWidth;
                 const height = video.offsetHeight;
                 if (width > 0 && height > 0) {
-                    const scale = Math.min(width, height) / Math.max(width, height);
+                    const scale = Math.max(width, height) / Math.min(width, height);
                     video.style.transform = `rotate(${nextRotation}deg) scale(${scale.toFixed(2)})`;
                 } else {
                     video.style.transform = `rotate(${nextRotation}deg)`;
+                }
+                if (video.parentElement) {
+                    video.parentElement.style.overflow = 'hidden';
                 }
             } else {
                 video.style.transform = nextRotation === 0 ? '' : `rotate(${nextRotation}deg)`;
